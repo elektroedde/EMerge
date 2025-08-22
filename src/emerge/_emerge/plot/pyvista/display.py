@@ -583,7 +583,7 @@ class PVDisplay(BaseDisplay):
         self._ctr += 1
         grid[name] = static_field
 
-        grid_no_nan = grid.ptc().threshold(scalars=name)
+
         print("I am on develop")
         # Determine color limits
         if clim is None:
@@ -595,14 +595,16 @@ class PVDisplay(BaseDisplay):
             clim = (-lim, lim)
 
         kwargs = setdefault(kwargs, cmap=cmap, clim=clim, opacity=opacity, pickable=False, multi_colors=True)
-        actor = self._plot.add_mesh(grid_no_nan, scalars=name, **kwargs)
+        actor = self._plot.add_mesh(grid, scalars=name, **kwargs)
 
 
         if self._do_animate:
             def on_update(obj: _AnimObject, phi: complex):
                 field_anim = obj.T(np.real(obj.field * phi))
                 obj.grid[name] = field_anim
-            self._objs.append(_AnimObject(field_flat, T, grid_no_nan, actor, on_update))
+            self._objs.append(_AnimObject(field_flat, T, grid, actor, on_update))
+
+
 
 
     def add_title(self, title: str) -> None:
